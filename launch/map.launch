@@ -1,0 +1,38 @@
+<launch>
+	<arg name="map_file" value="$(find mapf)/map_scen/rmtst01.map" />
+    <param name="map_file" type="str" value="$(arg map_file)" />
+    <param name="scen_file" type="str" value="$(arg map_file).scen" />
+    <param name="robot_no" type="int" value="2" />
+    
+    <node pkg="mapf"  name="plot_map" type="test_mapf" output="screen"/>
+    <node pkg="rviz"  name="rviz" type="rviz" args="$(find mapf)/map.rviz"/>
+
+    <arg name="robot_name_prefix"  value="robot" />
+	<arg name="robot_capabilities_prefix" value="" />
+	<arg name="robot_initial_state_prefix" value="" />
+
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">	 
+		<arg name="gui" value="true"/>	
+		<arg name="paused" value="true"/>   
+		<arg name="world_name" value="$(find wall_e_gazebo)/worlds/simulation_simple.world"/>	    
+	</include>
+	
+	<param name="/use_sim_time" value="true" />
+
+	<include file="$(find mobile_robot)/launch/single_robot.launch" >
+		<arg name="robot_name"  value="$(arg robot_name_prefix)1" />
+		<arg name="initial_x" value="0.4" />
+		<arg name="initial_y" value="9.2" />
+		<arg name="initial_t" value="0.0" />
+		<arg name="robot_capabilities" default="$(arg robot_capabilities_prefix)" />
+		<arg name="robot_initial_state" default="$(arg robot_initial_state_prefix)" />
+	</include>
+	<include file="$(find mobile_robot)/launch/single_robot.launch" >
+		<arg name="robot_name"  value="$(arg robot_name_prefix)2" />
+		<arg name="initial_x" value="4.0" />
+		<arg name="initial_y" value="4.8" />
+		<arg name="initial_t" value="0.0" />
+		<arg name="robot_capabilities" default="$(arg robot_capabilities_prefix)" />
+		<arg name="robot_initial_state" default="$(arg robot_initial_state_prefix)" />
+	</include>
+</launch>
